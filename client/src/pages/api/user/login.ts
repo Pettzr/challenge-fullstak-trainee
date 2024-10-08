@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { cookies } from "next/headers";
 
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         const {username, password} = req.body;
-        
+
         try{ 
             const response = await fetch('http://localhost:5000/login',  {
                 method: 'POST',
@@ -19,7 +20,13 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
               });
 
               if (response.ok) {
+                const data = await response.json();
+                const token = data.token;
+
+                res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=36000`);
+
                 res.status(200).json({ success: true });
+
               } else {
                 const errorData = await response.json();
                 res.status(400).json({ success: false, message: errorData.message });

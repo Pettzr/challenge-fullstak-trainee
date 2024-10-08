@@ -6,9 +6,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",  
+    "outDir": "./dist", 
+    "typeRoots": ["./src/types", "./src/types/events", "./node_modules/@types"], 
     "rootDir": "./src"      
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }

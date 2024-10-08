@@ -1,20 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secrettoken';
+export function authenticateToken(req: Request, res: Response, next: NextFunction): void {
+    const token = req.cookies.token;
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const token = req.cookies.token; // Acessa o token a partir dos cookies
+    if (!token) {
+        res.status(401).json({ message: 'Access denied. No token provided.' });
+        return;
+    }
 
-  if (!token) {
-    return res.status(401).json({ message: 'Acesso negado. Token não fornecido.' });
-  }
+    try {
+      
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secrettoken') as string | JwtPayload;
+      const {userId} = decoded as {userId: string}
+      req.user = userId; 
+      next();
 
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // Adiciona os dados decodificados ao request
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: 'Token inválido ou expirado.' });
-  }
+    } catch (error) {
+      res.status(400).json({ message: 'Invalid token.' });
+      return;
+    }
 }
