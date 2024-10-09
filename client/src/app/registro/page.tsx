@@ -20,24 +20,25 @@ export default function Page () {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        try {
-            const response = await fetch('/api/user/register', {
+        try{ 
+            const response = await fetch('http://localhost:5000/register',  {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify(formData),
+              credentials: 'include',
             });
       
             const data = await response.json();
             if (data.success) {
-              console.log('Cadastro realizado com sucesso!');
+              console.log(data)
             } else {
-              console.log('Erro no cadastro. Tente novamente.');
+            console.log(data);
             }
-          } catch (error) {
-            console.log('Erro ao enviar o formulário.');
-          }
+        } catch (error) {
+          console.error('Erro ao enviar formulário:', error)
+        }
     }
 
     return(

@@ -9,7 +9,7 @@ export default function Page () {
         {type: 'password', label: 'Senha',  placeholder: 'Digite sua senha', name: 'password'},
     ]
 
-    const [formData, setFormData] = useState({username: '', password: '', confirmPassword: ''})
+    const [formData, setFormData] = useState({username: '', password: ''})
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target
@@ -22,17 +22,18 @@ export default function Page () {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
-            const response = await fetch('/api/user/login', {
+            const response = await fetch('http://localhost:5000/login', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify(formData),
+              credentials: 'include'
             });
       
             const data = await response.json();
             if (data.success) {
-              console.log('Login realizado com sucesso!');
+                console.log(data)
             } else {
               console.log('Erro no login. Tente novamente.');
             }

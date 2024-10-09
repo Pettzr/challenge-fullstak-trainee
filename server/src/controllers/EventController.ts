@@ -4,13 +4,17 @@ import { addEventService, editEventService, getAllEventsService, removeEventServ
 
     export async function addEventToAgendaController(req: Request, res: Response) {
         const userId  = req.user;
-        const { event } = req.body;
+        const { title, description, date } = req.body;
     
+        console.log(title, description, date )
+
         try {
 
             const newEvent = {
-                ...event,
                 id: uuidv4(),
+                title: title,
+                description: description,
+                date: date,
             }
 
             const updatedUser = await addEventService(userId as string, newEvent);
@@ -24,9 +28,11 @@ import { addEventService, editEventService, getAllEventsService, removeEventServ
     export async function getAllEventsController (req: Request, res: Response) {
         const userId = req.user;
 
+        console.log(userId)
+
     try {
         const events = await getAllEventsService(userId as string);
-        res.status(200).json({ success: true, events });
+        res.status(200).json({events});
     } catch (error) {
         console.error("Erro ao buscar eventos:", error);
         res.status(400).json({ success: false, message: 'Error fetching events', error });

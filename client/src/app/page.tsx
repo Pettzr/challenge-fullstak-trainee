@@ -1,9 +1,12 @@
-import Image from "next/image";
+"use client";
+
+import Events from "@/components/Events";
 
 export default function Home() {
+ 
   return (
-    <div>
-      <h1>OI</h1>
+    <div className="p-4">
+      <Events/>
     </div>
   );
 }

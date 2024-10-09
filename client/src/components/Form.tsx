@@ -3,15 +3,18 @@ type InputProps = {
     label: string;
     placeholder: string;
     name: string;
+    value?: string;
   };
 
   type FormProps = {
     inputs: InputProps[];
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    showCancelButton?: boolean;
+    onCancel?: () => void;
   };
 
-  function Form({ inputs, onSubmit, onChange }: FormProps) {
+  function Form({ inputs, onSubmit, onChange, showCancelButton, onCancel }: FormProps) {
     return (
         <div className="min-w-screen min-h-screen flex justify-center items-center bg-gray-100">
           <form onSubmit={onSubmit} className="w-full max-w-lg bg-white p-8 rounded-lg shadow-lg">
@@ -39,6 +42,16 @@ type InputProps = {
             >
               Enviar
             </button>
+
+            {showCancelButton && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="w-1/2 bg-gray-300 hover:bg-gray-400 text-black font-bold py-3 px-4 rounded-lg ml-4 transition duration-300"
+            >
+              Cancel
+            </button>
+          )}
           </form>
         </div>
       );
