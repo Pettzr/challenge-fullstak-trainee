@@ -42,8 +42,10 @@ export default function Page () {
     }
 
     return(
-        <div>
-            <Form inputs={inputs} onSubmit={handleSubmit} onChange={handleInputChange}/>
+      <div className="min-w-screen min-h-screen flex justify-center items-center">
+        <div className="w-11/12 sm:w-4/5 xl:w-3/4">
+          <Form inputs={inputs} onSubmit={handleSubmit} onChange={handleInputChange}/>
         </div>
+      </div>
     )
 }

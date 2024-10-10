@@ -1,94 +1,57 @@
 import prisma from '../configs/prisma';
-import { Event } from '../types/event';
 
-export async function addEventService(userId: string, newEvent: Event) {
+export async function addEventService(userId: string, title: string, description: string, date: Date) {
 
-    const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { events: true },
-    });
-  
-    if (!user) {
-        throw new Error('Usuário não encontrado');
-    }
-  
-    const currentEvents = Array.isArray(user.events) ? (user.events as any[]) : [];
-  
-    const updatedEvents = [...currentEvents, newEvent];
-  
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
+    
+
+    const event = await prisma.event.create({
       data: {
-        events: updatedEvents,
+        title: title,
+        description: description,
+        date: date,
+        userId: userId
       },
     });
   
-    return updatedUser;
+    return event;
 }
 
 export async function getAllEventsService(userdId: string) {
-    const user = await prisma.user.findUnique({
-        where: {id: userdId},
-        select: {events : true},
-    })
 
-    if (!user) {
-        throw new Error('Usuário não encontrado');
-        
-    }
-
-    return user.events; 
+    const events = await prisma.event.findMany({
+        where: {
+            userId: userdId
+        }
+      });
+    
+      return events
 }
 
-export async function editEventService(userId: string, eventId: string, updatedEventData: Partial<Event>) {
+export async function editEventService(userId: string, eventId: string, data: object) {
 
-    const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { events: true },
-    });
-
-    if (!user) {
-        throw new Error('Usuário não encontrado');
-    }
-
-    const currentEvents = Array.isArray(user.events) ? (user.events as any[]) : [];
-    const eventIndex = currentEvents.findIndex(event => event.id === eventId);
-
-    if (eventIndex === -1) {
-        throw new Error('Evento não encontrado');
-    }
-
-    const updatedEvent = { ...currentEvents[eventIndex], ...updatedEventData };
-
-    currentEvents[eventIndex] = updatedEvent;
-
-    const updatedUser = await prisma.user.update({
-        where: { id: userId },
-        data: {
-            events: currentEvents,
+    const updatedEvent = await prisma.event.update({
+        where: {
+            id: eventId,
+            userId: userId
         },
-    });
+        data: {
+            ...data
+        }
+      });
 
-    return updatedUser;
+    return updatedEvent  
 }
   
 export async function removeEventService(userId: string, eventId: string) {
-    const user = await prisma.user.findUnique({ 
-            where: { id: userId },
-            select: { events: true }
-    });
 
-    if (!user) throw new Error('User not found');
+    const deleteEvent = await prisma.event.delete({
+        where : {
+            id: eventId,
+            userId: userId
+        }
+    })
 
-    const currentEvents = Array.isArray(user.events) ? (user.events as any[]) : [];
+    return deleteEvent
 
-    const updatedEvents = currentEvents.filter((event: any) => event.id !== eventId);
-
-    return await prisma.user.update({
-        where: { id: userId },
-        data: {
-        events: updatedEvents,
-        },
-    });
 }
   

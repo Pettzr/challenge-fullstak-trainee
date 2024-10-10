@@ -1,6 +1,6 @@
 "use client";
 
-import Events from "@/components/Events";
+import Events from "@/components/Events/GetEvents";
 
 export default function Home() {
  

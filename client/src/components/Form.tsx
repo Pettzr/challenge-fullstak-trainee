@@ -16,13 +16,13 @@ type InputProps = {
 
   function Form({ inputs, onSubmit, onChange, showCancelButton, onCancel }: FormProps) {
     return (
-        <div className="min-w-screen min-h-screen flex justify-center items-center bg-gray-100">
-          <form onSubmit={onSubmit} className="w-full max-w-lg bg-white p-8 rounded-lg shadow-lg">
+        <div className="flex justify-center rounded-md items-center bg-white border">
+          <form onSubmit={onSubmit} className="w-full p-8 rounded-lg shadow-lg">
             {inputs.map((input, index) => (
               <div key={index} className="mb-6">
                 <label
                   htmlFor={input.name}
-                  className="block text-gray-700 text-sm font-bold mb-2"
+                  className="block text-gray-700 font-bold mb-2 sm: text-sm xl: text-xl"
                 >
                   {input.label}
                 </label>
@@ -47,7 +47,7 @@ type InputProps = {
             <button
               type="button"
               onClick={onCancel}
-              className="w-1/2 bg-gray-300 hover:bg-gray-400 text-black font-bold py-3 px-4 rounded-lg ml-4 transition duration-300"
+              className="w-full bg-gray-300 hover:bg-gray-400 text-black font-bold py-3 px-4 rounded-lg mt-4 transition duration-300"
             >
               Cancel
             </button>

@@ -5,19 +5,11 @@ import { addEventService, editEventService, getAllEventsService, removeEventServ
     export async function addEventToAgendaController(req: Request, res: Response) {
         const userId  = req.user;
         const { title, description, date } = req.body;
-    
-        console.log(title, description, date )
+        const formatedDate = new Date(date)
 
         try {
 
-            const newEvent = {
-                id: uuidv4(),
-                title: title,
-                description: description,
-                date: date,
-            }
-
-            const updatedUser = await addEventService(userId as string, newEvent);
+            const updatedUser = await addEventService(userId as string, title, description, formatedDate);
             res.status(200).json({ success: true, updatedUser });
         } catch (error) {
             console.error("Erro ao adicionar evento:", error);
@@ -28,24 +20,29 @@ import { addEventService, editEventService, getAllEventsService, removeEventServ
     export async function getAllEventsController (req: Request, res: Response) {
         const userId = req.user;
 
-        console.log(userId)
-
-    try {
-        const events = await getAllEventsService(userId as string);
-        res.status(200).json({events});
-    } catch (error) {
-        console.error("Erro ao buscar eventos:", error);
-        res.status(400).json({ success: false, message: 'Error fetching events', error });
-    }
+        try {
+            const events = await getAllEventsService(userId as string);
+            res.status(200).json({events});
+        } catch (error) {
+            console.error("Erro ao buscar eventos:", error);
+            res.status(400).json({ success: false, message: 'Error fetching events', error });
+        }
     }
 
     export async function editEventController(req: Request, res: Response) {
         const userId = req.user;
         const { eventId } = req.params;
-        const updatedEventData = req.body;
+        let data = req.body;
+
+        if (data.hasOwnProperty('date')) {
+            data = {
+                ...data,
+                date: new Date(data.date),
+            };
+        }
 
         try {
-            const updatedUser = await editEventService(userId as string, eventId, updatedEventData);
+            const updatedUser = await editEventService(userId as string, eventId, data);
             res.status(200).json({ success: true, updatedUser });
         } catch (error) {
             console.error("Erro ao editar evento:", error);
