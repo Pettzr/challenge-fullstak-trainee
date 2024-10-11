@@ -285,14 +285,46 @@ A resposta de uma requisição bem sucedida deve ser algo como:
 ________
 
 
-
-
-
 ### Rotas Frontend:
 
+_________
+
+> http://localhost:3000/
+
+Essa é a rota principal do aplicativo. Aqui o usuário poderá encontrar todos os seus eventos, criar e editar-los.
+
+![image](https://github.com/user-attachments/assets/d64c088a-e27b-4059-a083-7470d065a8f5)
+
+________
+
+> http://localhost:3000/registro
+
+Essa é a rota de registro de usuários.
+
+![image](https://github.com/user-attachments/assets/57a52103-f2ea-4a08-97a9-ef577e71f15a)
 
 
-______
+________
+
+> http://localhost:3000/login
+
+Essa é a rota de login, necessária para o usuário usufruir do site.
+
+![image](https://github.com/user-attachments/assets/3c6175dd-e8c2-4e36-921f-77250164e342)
+
+________
+
+> http://localhost:3000/perfil
+
+Nessa rota, o usuário pode deslogar, excluir sua conta, ou alterar o usuário (caso o nome escolhido não esteja em uso)
+
+![image](https://github.com/user-attachments/assets/c2b50742-9ca6-4300-a716-2df3a3175661)
+
+
+________
+
+
+
 ## Objetivo
 Desenvolver um aplicativo de agenda onde um usuário possa se registrar, logar, visualizar e editar seus dados, criar, visualizar, editar e excluir eventos.
 ______
