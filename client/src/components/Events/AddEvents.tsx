@@ -8,6 +8,7 @@ export default function AddEvents () {
     const baseInputs = [
         {type: 'text', label: 'Título', placeholder: 'Digite o título', name:'title'},
         {type: 'date', label: 'Data', placeholder: 'dd/mm/yyyy', name: 'date'},
+        {type: 'text', label: 'Horário', placeholder: '00:00hs', name: 'time'},
         {type: 'text', label: 'Descrição', placeholder: 'Digite a descrição', name: 'description'},
         {type: 'checkbox', label: 'Repetir', placeholder: '', name:'repeat'},
     ]
@@ -19,6 +20,7 @@ export default function AddEvents () {
     const resetForm = {
         title: '',
         date: '',
+        time: '',
         description: '',
         repeat: false,
         frequency: 0,

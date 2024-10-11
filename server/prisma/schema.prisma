@@ -19,6 +19,7 @@ model Event {
   title       String
   description String
   date        DateTime @default(now()) 
+  time        String?
   repeat      Boolean  @default(false) 
   frequency   Int?
   recurrenceType String?

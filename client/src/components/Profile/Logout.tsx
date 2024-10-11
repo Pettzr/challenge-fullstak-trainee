@@ -16,6 +16,7 @@ export default function LogoutButton () {
         const data = await response.json();
         if (data.success) {
           router.push("/login");
+          window.location.reload();
         } else {
           alert('Erro ao fazer logout');
         }

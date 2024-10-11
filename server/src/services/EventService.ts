@@ -8,6 +8,7 @@ export async function addEventService(
     title: string, 
     description: string, 
     date: Date,
+    time?: string,
     repeat?: boolean,
     frequency?: number,
     recurrenceType?: string, 
@@ -20,6 +21,7 @@ export async function addEventService(
         userId: userId
     };
 
+    if (typeof time !== 'undefined') eventData.time = time;
     if (typeof repeat !== 'undefined') eventData.repeat = repeat;
     if (typeof frequency !== null) eventData.frequency = frequency;
     if (typeof recurrenceType !== 'undefined') eventData.recurrenceType = recurrenceType;

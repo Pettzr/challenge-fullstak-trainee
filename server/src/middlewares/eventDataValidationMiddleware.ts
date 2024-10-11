@@ -6,6 +6,7 @@ export const eventValidationRules = [
     body('description').trim().notEmpty().withMessage('Description is required'),
     body('date').isISO8601().withMessage('Invalid date format'),
     body('repeat').isBoolean().withMessage('Repeat must be a boolean'),
+    body('time').optional().notEmpty().withMessage('Time can not be empty'),
 
     body('frequency')
     .if(body('repeat').equals('true'))

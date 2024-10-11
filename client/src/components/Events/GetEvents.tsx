@@ -12,6 +12,7 @@ type Event = {
   title: string;
   description: string;
   date: string;
+  time: string;
 };
 
 type EventsResponse = {
@@ -72,7 +73,10 @@ export default function Events() {
               <div className="flex flex-col">
                 <h1 className="text-lg font-semibold">{event.title}</h1>
                 <h2 className="text-gray-700">{event.description}</h2>
-                <h2 className="text-gray-500">{event.date.split('T')[0].split('-').reverse().join('/')}</h2>
+                <div className="flex">
+                  <h2 className="text-gray-500 ">{event.date.split('T')[0].split('-').reverse().join('/')}</h2>
+                  <h2 className="text-gray-500 ml-4">{event.time}</h2>
+                </div>
               </div>
             </div>
 

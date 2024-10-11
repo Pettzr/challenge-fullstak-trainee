@@ -1,6 +1,7 @@
 import express from "express";
 import routesUser from "./routes/UserRoutes";
 import routesEvent from "./routes/EventRoutes"
+import routesAdmin from "./routes/AdminRoutes";
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from "cors";
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // import das rotas
 app.use("/", routesUser);
 app.use("/", routesEvent)
+app.use("/admin", routesAdmin)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

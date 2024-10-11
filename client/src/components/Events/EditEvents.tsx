@@ -8,6 +8,7 @@ type Event = {
     title: string;
     description: string;
     date: string;
+    time: string;
   };
 
 type EditEventsProps = {
@@ -20,6 +21,7 @@ export default function EditEvents ({event}: EditEventsProps) {
     const baseInputs = [
         {type: 'text', label: 'Título', placeholder: `${event.title}`, name:'title'},
         {type: 'date', label: 'Data', placeholder: `${event.date.split('T')[0].split('-').reverse().join('/')}`, name: 'date'},
+        {type: 'text', label: 'Horário', placeholder: '00:00hs', name: 'time'},
         {type: 'text', label: 'Descrição', placeholder: `${event.description}`, name: 'description'},
         {type: 'checkbox', label: 'Repetir', placeholder: '', name:'repeat'},
     ]
@@ -31,6 +33,7 @@ export default function EditEvents ({event}: EditEventsProps) {
     const resetForm = {
         title: event.title,
         date: event.date,
+        time: event.time,
         description: event.description,
         repeat: false,
         frequency: 0,

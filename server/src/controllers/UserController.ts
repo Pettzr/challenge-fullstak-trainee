@@ -71,8 +71,8 @@ export async function editUserController (req: Request, res: Response) {
         const user = await editUserService(userId as string, username);
         res.status(200).json({user});
     } catch (error) {
-        console.error("Erro ao deletar usuário:", error);
-        res.status(400).json({ success: false, message: 'Error deleting user', error });
+        console.error("Erro ao editar:", error);
+        res.status(400).json({ success: false, message: 'Error editing user', error });
     }
 }
 

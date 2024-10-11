@@ -3,14 +3,13 @@ import { addEventService, checkEventService, editEventService, getAllEventsServi
 
     export async function addEventToAgendaController(req: Request, res: Response) {
         const userId  = req.user;
-        const { title, description, date, repeat, frequency, recurrenceType } = req.body;
+        const { title, description, date, time, repeat, frequency, recurrenceType } = req.body;
         console.log(date)
         const formatedDate = new Date(date)
         const formatedFrequency = Number(frequency)
 
         try {
-
-            const updatedUser = await addEventService(userId as string, title, description, formatedDate, repeat, formatedFrequency, recurrenceType);
+            const updatedUser = await addEventService(userId as string, title, description, formatedDate, time, repeat, formatedFrequency, recurrenceType);
             res.status(200).json({ success: true, updatedUser });
         } catch (error) {
             console.error("Erro ao adicionar evento:", error);
