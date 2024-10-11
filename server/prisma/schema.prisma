@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  username    String
+  username    String   @unique
   password    String   @unique
   events      Event[]
 }
@@ -20,6 +20,8 @@ model Event {
   description String
   date        DateTime @default(now()) 
   repeat      Boolean  @default(false) 
+  frequency   Int?
+  recurrenceType String?
   userId      String   @db.ObjectId
   user        User     @relation(fields: [userId], references: [id]) 
 }

@@ -1,5 +1,6 @@
 "use client";
 import Form from "@/components/Form";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 
@@ -8,10 +9,11 @@ export default function Page () {
         {type: 'text', label: 'Username', placeholder: 'Digite seu username', name:'username'},
         {type: 'password', label: 'Senha',  placeholder: 'Digite sua senha', name: 'password'},
     ]
+    const router = useRouter()
 
     const [formData, setFormData] = useState({username: '', password: ''})
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const {name, value} = e.target
         setFormData((prev) => ({
             ...prev,
@@ -33,12 +35,12 @@ export default function Page () {
       
             const data = await response.json();
             if (data.success) {
-                console.log(data)
+              router.push('/')
             } else {
-              console.log('Erro no login. Tente novamente.');
+              alert('Erro no login. Tente novamente.');
             }
           } catch (error) {
-            console.log('Erro ao enviar o formulário.');
+            alert('Erro ao enviar o formulário.');
           }
     }
 

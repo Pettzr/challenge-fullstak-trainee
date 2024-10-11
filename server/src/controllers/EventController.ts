@@ -1,15 +1,16 @@
 import { Request, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
-import { addEventService, editEventService, getAllEventsService, removeEventService } from '../services/EventService';
+import { addEventService, checkEventService, editEventService, getAllEventsService, removeEventService } from '../services/EventService';
 
     export async function addEventToAgendaController(req: Request, res: Response) {
         const userId  = req.user;
-        const { title, description, date } = req.body;
+        const { title, description, date, repeat, frequency, recurrenceType } = req.body;
+        console.log(date)
         const formatedDate = new Date(date)
+        const formatedFrequency = Number(frequency)
 
         try {
 
-            const updatedUser = await addEventService(userId as string, title, description, formatedDate);
+            const updatedUser = await addEventService(userId as string, title, description, formatedDate, repeat, formatedFrequency, recurrenceType);
             res.status(200).json({ success: true, updatedUser });
         } catch (error) {
             console.error("Erro ao adicionar evento:", error);
@@ -37,11 +38,13 @@ import { addEventService, editEventService, getAllEventsService, removeEventServ
         if (data.hasOwnProperty('date')) {
             data = {
                 ...data,
+                frequency: Number(data.frequency),
                 date: new Date(data.date),
             };
         }
 
         try {
+            console.log(data)
             const updatedUser = await editEventService(userId as string, eventId, data);
             res.status(200).json({ success: true, updatedUser });
         } catch (error) {
@@ -50,7 +53,7 @@ import { addEventService, editEventService, getAllEventsService, removeEventServ
         }
     }
   
-    export async function removeEventFromAgendaController(req: Request, res: Response) {
+    export async function removeEventController(req: Request, res: Response) {
         const userId = req.user;
         const { eventId } = req.params;
     
@@ -59,5 +62,16 @@ import { addEventService, editEventService, getAllEventsService, removeEventServ
             res.status(200).json({ success: true, updatedUser });
         } catch (error) {
             res.status(400).json({ success: false, message: 'Error removing event from agenda', error });
+        }
+    }
+
+    export async function checkEventsController (req: Request, res: Response) {
+        const userId = req.user;
+
+        try {
+            const updatedUser = await checkEventService(userId as string);
+            res.status(200).json({ success: true, updatedUser });
+        } catch (error) {
+            res.status(400).json({ success: false, message: 'Error checking event from agenda', error });
         }
     }

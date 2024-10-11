@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaRegEdit } from "react-icons/fa"
+import { MdOutlineEditCalendar } from "react-icons/md";
 import Form from "../Form";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -16,19 +16,31 @@ type EditEventsProps = {
 
 export default function EditEvents ({event}: EditEventsProps) {
     const [showForm, setShowForm] = useState(false)
-    const inputs = [
+
+    const baseInputs = [
         {type: 'text', label: 'Título', placeholder: `${event.title}`, name:'title'},
-        {type: 'date', label: 'Data', placeholder: `${event.date}`, name: 'date'},
-        {type: 'text', label: 'Descrição', placeholder: `${event.description}`, name: 'description'}
+        {type: 'date', label: 'Data', placeholder: `${event.date.split('T')[0].split('-').reverse().join('/')}`, name: 'date'},
+        {type: 'text', label: 'Descrição', placeholder: `${event.description}`, name: 'description'},
+        {type: 'checkbox', label: 'Repetir', placeholder: '', name:'repeat'},
     ]
-    const [formData, setFormData] = useState({
-        title: '',
-        date: '',
-        description: '',
-    })
+    const repeatInputs = [
+        {type: 'number', label: 'Frequência', placeholder: 'Digite a frequência de repetição', name:'frequency'},
+        {type: 'select', label: 'Tipo', placeholder:'', name: 'recurrenceType'}
+    ]
+
+    const resetForm = {
+        title: event.title,
+        date: event.date,
+        description: event.description,
+        repeat: false,
+        frequency: 0,
+        recurrenceType: 'daily'
+    }
+
+    const [formData, setFormData] = useState(resetForm)
     const queryClient = useQueryClient()
 
-    const handleAddEvent = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleEditEvent = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const response = await fetch(`http://localhost:5000/edit-event/${event.id}`, {
             method: 'PATCH',
@@ -43,31 +55,35 @@ export default function EditEvents ({event}: EditEventsProps) {
             console.log(data);
       
             queryClient.invalidateQueries({ queryKey: ["events"] });
+            setShowForm(false);
           } else {
-            console.error("Failed to add event");
+            console.error("Failed to Edit event");
           }
         
     }
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const {name, value, type} = e.target
+        const isCheckbox = type === 'checkbox';
+        const checked = isCheckbox ? (e.target as HTMLInputElement).checked : undefined;
+
         setFormData((prev) => ({
             ...prev,
-            [name]: value,
+            [name]: type === 'checkbox' ? checked : value,
         }))
-        console.log(formData)
     }
 
     const toggleVisibility = () => {
         setShowForm(!showForm)
+        setFormData(resetForm)
     }
 
     return(
-        <div className="flex flex-col w-screen">
-            <FaRegEdit className=" text-2xl" onClick={toggleVisibility} />
+        <div className="flex flex-col gap-2 w-full">
+            <MdOutlineEditCalendar className=" text-2xl" onClick={toggleVisibility} />
             {showForm && (
-                <div className="w-3/4 self-center">
-                    <Form inputs={inputs} onSubmit={handleAddEvent} onChange={handleInputChange} showCancelButton={true} onCancel={toggleVisibility}/>
+                <div className="">
+                    <Form inputs={formData.repeat ? [...baseInputs, ...repeatInputs] : baseInputs} onSubmit={handleEditEvent} onChange={handleInputChange} showCancelButton={true} onCancel={toggleVisibility}/>
                 </div>
             )}
         </div>

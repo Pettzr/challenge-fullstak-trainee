@@ -40,3 +40,46 @@ export async function loginUserService(username:string, password:string) {
 
     return {token}
 }
+
+export async function checkLoginService (userId: string) {
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId
+        }, select: {
+            username: true
+        }
+    })
+
+    return user
+}
+
+export async function editUserService (userId: string, newUsername: string) {
+    const user = await prisma.user.update({
+        where: {
+            id: userId
+        },
+        data: {
+            username: newUsername
+        }
+    })
+
+    return user
+}
+
+export async function deleteUserService (userId: string) {
+
+    const eventsDeleted = await prisma.event.deleteMany({
+        where: {
+            userId: userId
+        }
+    })
+
+    const deletedUser = await prisma.user.delete({
+        where: {
+            id: userId
+        }
+    })
+
+    return {deletedUser, eventsDeleted}
+}
+

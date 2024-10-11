@@ -1,5 +1,6 @@
 "use client";
 import Form from "@/components/Form";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page () {
@@ -9,8 +10,10 @@ export default function Page () {
         {type: 'password', label: 'Confirmar a senha',  placeholder: 'Digite novamente sua senha', name: 'confirmPassword'}
     ]
     const [formData, setFormData] = useState({username: '', password: '', confirmPassword: ''})
+    const router = useRouter()
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const {name, value} = e.target
         setFormData((prev) => ({
             ...prev,
@@ -18,7 +21,7 @@ export default function Page () {
         }))
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement >) => {
         e.preventDefault()
         try{ 
             const response = await fetch('http://localhost:5000/register',  {
@@ -32,12 +35,12 @@ export default function Page () {
       
             const data = await response.json();
             if (data.success) {
-              console.log(data)
+              router.push('/login')
             } else {
-            console.log(data);
+              alert('Erro no registro. Tente novamente.');
             }
         } catch (error) {
-          console.error('Erro ao enviar formulário:', error)
+          alert('Erro no registro. Tente novamente.');
         }
     }
 

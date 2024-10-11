@@ -10,7 +10,7 @@ export default function DelEvents ({eventId}: DelEventProps) {
 
     const handleDelEvent = async (eventId: string) => {
         const response = await fetch(`http://localhost:5000/del-event/${eventId}`, {
-            method: 'PATCH',
+            method: 'DELETE',
             credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export default function DelEvents ({eventId}: DelEventProps) {
     }
 
     return(
-        <div>
+        <div className="">
             <TbTrash onClick={() => handleDelEvent(eventId)} className="text-2xl"/>
         </div>
     )
