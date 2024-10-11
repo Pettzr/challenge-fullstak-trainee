@@ -21,6 +21,28 @@ export default function Page () {
         }))
     }
 
+    async function checkEvents() {
+      const response = await fetch('http://localhost:5000/check-events', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    
+      const data = await response.json();
+    
+      const upcomingEvents = data.updatedUser.filter((event: any) => event.daysUntilEvent !== "");
+    
+      if (upcomingEvents.length > 0) {
+        const alertMessage = upcomingEvents
+          .map((event: any) => `${event.title}: ${event.daysUntilEvent}`)
+          .join('\n');
+    
+        alert(alertMessage);
+      }
+    }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
@@ -35,6 +57,7 @@ export default function Page () {
       
             const data = await response.json();
             if (data.success) {
+              checkEvents()
               router.push('/')
             } else {
               alert('Erro no login. Tente novamente.');

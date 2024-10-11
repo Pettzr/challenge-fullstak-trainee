@@ -1,4 +1,5 @@
 import prisma from '../configs/prisma';
+import { calculateDaysUntilEvent } from '../utils/calculateDaysUntilEvent';
 import { calculateNextDate } from '../utils/calculateNextEventDate';
 import { stripTime } from '../utils/stripTimeDate';
 
@@ -17,7 +18,7 @@ export async function addEventService(
         description: description,
         date: date,
         userId: userId
-      };
+    };
 
     if (typeof repeat !== 'undefined') eventData.repeat = repeat;
     if (typeof frequency !== null) eventData.frequency = frequency;
@@ -80,7 +81,7 @@ export async function checkEventService (userId: string) {
 
         const eventDate = stripTime(event.date)
 
-        if(eventDate < currentDate) {
+        if(eventDate.getTime() < currentDate.getTime()) {
             if(!event.repeat) {
                 return prisma.event.delete({
                     where: {id: event.id}
@@ -111,8 +112,18 @@ export async function checkEventService (userId: string) {
 
     await Promise.all(eventPromises);
 
-    return await prisma.event.findMany({
-        where: {userId: userId}
-    })
+    const updatedEvents = await prisma.event.findMany({
+        where: { userId: userId }
+    });
+
+    const eventsWithDaysInfo = updatedEvents.map(event => {
+        const daysMessage = calculateDaysUntilEvent(event.date);
+        return {
+            ...event,
+            daysUntilEvent: daysMessage
+        };
+    });
+
+    return eventsWithDaysInfo;
 }
   

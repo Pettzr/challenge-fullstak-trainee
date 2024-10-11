@@ -44,7 +44,6 @@ import { addEventService, checkEventService, editEventService, getAllEventsServi
         }
 
         try {
-            console.log(data)
             const updatedUser = await editEventService(userId as string, eventId, data);
             res.status(200).json({ success: true, updatedUser });
         } catch (error) {
